@@ -1,43 +1,16 @@
 import React from "react";
 
 const posts = [
-    {imgUsuario: "assets/img/meowed.svg", alt: "foto-perfil", usuario: "meowed", conteudo:"assets/img/gato-telefone.svg", altConteudo: "foto-post", imgCurtidas: "assets/img/respondeai.svg", altCurtidas:"foto-perfil"},
-    {imgUsuario: "assets/img/barked.svg", alt: "foto-perfil",usuario: "barked", conteudo:"assets/img/dog.svg", altConteudo: "foto-post", imgCurtidas: "assets/img/adorable_animals.svg", altCurtidas:"foto-perfil"}
+    {imgUsuario: "assets/img/meowed.svg", alt: "foto-perfil", usuario: "meowed", conteudo:"assets/img/gato-telefone.svg", altConteudo: "foto-post", imgCurtidas: "assets/img/respondeai.svg", altCurtidas:"foto-perfil", mainLiked:"respondeai", qtdLikes:"outras 101.523 pessoas", liked:"true", mediaType:"image"},
+    {imgUsuario: "assets/img/barked.svg", alt: "foto-perfil",usuario: "barked", conteudo:"assets/img/dog.svg", altConteudo: "foto-post", imgCurtidas: "assets/img/adorable_animals.svg", altCurtidas:"foto-perfil", mainLiked:"adorable_animals", qtdLikes:"outras 99.159 pessoas", liked:"true", mediaType:"image"},
+    {imgUsuario: "assets/img/barked.svg", alt: "foto-perfil",usuario: "barked", conteudo:"assets/video/video.mp4", altConteudo: "foto-post", imgCurtidas: "assets/img/adorable_animals.svg", altCurtidas:"foto-perfil", mainLiked:"adorable_animals", qtdLikes:"outras 99.159 pessoas", liked:"true", mediaType:"video"}
 ];
 
 
-function Acoes(){
-
-    const [nameIconHeartOutline, setNameIconHeartOutline] = React.useState("nao-curtido visivel");
-    const [nameIconHeart, setNameIconHeart] = React.useState("curtido escondido");
-  
-    function curtir(){
-      setNameIconHeartOutline("nao-curtido escondido");
-      setNameIconHeart("curtido visivel md hydrated");
-    }
-  
-    function descurtir(){
-      setNameIconHeartOutline("nao-curtido visivel md hydrated");
-      setNameIconHeart("curtido escondido");
-    }
-  
-      return(
-          <div className="acoes">
-          <div>
-            <ion-icon class={nameIconHeartOutline} name="heart-outline" onClick={curtir}></ion-icon>
-            <ion-icon class={nameIconHeart} name="heart" onClick={descurtir}></ion-icon>  
-            <ion-icon name="chatbubble-outline"></ion-icon>
-            <ion-icon name="paper-plane-outline"></ion-icon>
-          </div>
-          <div>
-            <ion-icon name="bookmark-outline"></ion-icon>
-          </div>
-        </div>
-      );
-  }
-
-
 function Post(props){
+
+    const [liked, setLiked] = React.useState(props.liked);
+
     return(
         <div className="post">
             <div className="topo">
@@ -51,15 +24,32 @@ function Post(props){
             </div>
 
             <div className="conteudo">
-                <img src={props.conteudo} alt={props.altConteudo}/>
+                {
+                    props.mediaType === 'image' ? (<img src={props.conteudo} alt={props.altConteudo} onClick={() => setLiked(!liked)}/>) : (<video onClick={() => setLiked(!liked)} autoPlay muted loop controls>
+                    <source src={props.conteudo} type="video/mp4"></source>
+                  </video>)
+                }
+                
             </div>
 
             <div className="fundo">
-                <Acoes />
+                <div className="acoes">
+                    <div>
+                        {
+                            liked ? (<ion-icon name="heart" className="liked" onClick={() => setLiked(!liked)}></ion-icon>): (<ion-icon name="heart-outline" onClick={() => setLiked(!liked)}></ion-icon>)
+                        }
+                         
+                        <ion-icon name="chatbubble-outline"></ion-icon>
+                        <ion-icon name="paper-plane-outline"></ion-icon>
+                    </div>
+                    <div>
+                    <ion-icon name="bookmark-outline"></ion-icon>
+                </div>
+                </div>
                 <div className="curtidas">
                     <img src={props.imgCurtidas} alt={props.altCurtidas} />
                     <div className="texto">
-                        Curtido por <strong>respondeai</strong> e <strong>outras 101.523 pessoas</strong>
+                        Curtido por <strong>{props.mainLiked}</strong> e <strong>{props.qtdLikes}</strong>
                     </div>
                 </div>
             </div>
@@ -69,8 +59,10 @@ function Post(props){
 
 export default function Posts(){
     return(
+        <>
         <div className="posts">
-            { posts.map((post, index) => (<Post key={index} imgUsuario={post.imgUsuario} alt={post.alt} usuario={post.usuario} conteudo={post.conteudo} altConteudo={post.altConteudo} imgCurtidas={post.imgCurtidas} altCurtidas={post.altCurtidas}/>))}
-        </div>      
+            { posts.map((post, index) => (<Post key={index} imgUsuario={post.imgUsuario} alt={post.alt} usuario={post.usuario} conteudo={post.conteudo} altConteudo={post.altConteudo} imgCurtidas={post.imgCurtidas} altCurtidas={post.altCurtidas} mainLiked={post.mainLiked} qtdLikes={post.qtdLikes} liked={post.liked} mediaType={post.mediaType}/>))}
+        </div>
+        </>              
     );
 }

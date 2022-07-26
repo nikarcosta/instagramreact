@@ -180,8 +180,9 @@ body {
   cursor: pointer;
 }
 
-.post .conteudo img {
+.post .conteudo img, video {
   width: 100%;
+  cursor: pointer;
 }
 
 .post .fundo .acoes {
@@ -310,12 +311,13 @@ body {
   display: none !important;
 }
 
-.escondido{
-  display: none;
+ion-icon{
+  visibility: visible;
 }
 
-.curtido{
+.liked{
   color: red;
+  visibility: visible;
 }
 
 @media (max-width: 935px) {
